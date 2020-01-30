@@ -51,16 +51,20 @@
 
 
 \maketitle
-\begin{abstract}\marginnote[-3em]{The email address has been hacked since Satoshi disappeared.  Do not use!}
+
+\marginnote[-1.2in]{\href{https://github.com/chanhosuh/annotated-satoshi}{GitHub: chanhosuh/annotated-satoshi}}
+\marginnote[-1.05in]{Commit \texttt{\StrLeft{\commit}{7}} on branch \texttt{\branch}.}
+
+\begin{abstract}
 \noindent
-A purely peer-to-peer version of electronic cash would allow online payments to be sent directly from one party to another without going through a financial institution. Digital signatures provide part of the solution, but the main benefits are lost if a trusted third party is still required to prevent double-spending.We propose a solution to the double-spending problem using a peer-to-peer network. The network timestamps transactions by hashing them into an ongoing chain of hash-based proof-of-work, forming a record that cannot be changed without redoing the proof-of-work. The longest chain not only serves as proof of the sequence of events witnessed, but proof that it came from the largest pool of CPU power. As long as a majority of CPU power is controlled by nodes that are not cooperating to attack the network, they'll generate the longest chain and outpace attackers. The network itself requires minimal structure. Messages are broadcast on a best effort basis, and nodes can leave and rejoin the network at will, accepting the longest proof-of-work chain as proof of what happened while they were gone. 
+\marginnote[-0.6in]{The original whitepaper has no footnotes or margin notes.  We have added these to give further details or clarifications, including changes that have occurred in the Bitcoin implementation.} 
+
+\marginnote{Suggestions and corrections to this document may be submitted via pull request at its GitHub repository.}
+A purely peer-to-peer version of electronic cash would allow online payments to be sent directly from one party to another without going through a financial institution. Digital signatures provide part of the solution, but the main benefits are lost if a trusted third party is still required to prevent double-spending.We propose a solution to the double-spending problem using a peer-to-peer network. The network timestamps transactions by hashing them into an ongoing chain of hash-based proof-of-work, forming a record that cannot be changed without redoing the proof-of-work. The longest chain not only serves as proof of the sequence of events witnessed, but proof that it came from the largest pool of CPU power\footnote{Due to the prevalence of specialized equipment such as ASIC miners, references to "CPU power" should be replaced by "hashrate", i.e. the number of \texttt{sha256} operations per unit time.}. As long as a majority of CPU power is controlled by nodes that are not cooperating to attack the network, they'll generate the longest chain and outpace attackers. The network itself requires minimal structure. Messages are broadcast on a best effort basis, and nodes can leave and rejoin the network at will, accepting the longest proof-of-work chain as proof of what happened while they were gone. 
 \end{abstract}
-\marginnote[-15em]{Due to the prevalence of specialized equipment such as ASIC miners, references to "CPU power" should be replaced by "hashrate", i.e. the number of \texttt{sha256} operations per unit time.}
+
 
 \section{Introduction}\label{introduction}
-\marginnote{The original whitepaper has no footnotes or margin notes.  We have added these to give further details or clarifications, including changes that have occurred in the Bitcoin implementation.} 
-\marginnote{Suggestions and corrections to this document are welcome and may be submitted via pull request at its \href{https://github.com/chanhosuh/annotated-satoshi}{GitHub repository}.}
-\marginnote{Revision \texttt{\commit} on branch \texttt{\branch}.}
 
 \newthought{Commerce on the Internet} has come to rely almost exclusively on
 financial institutions serving as trusted third parties to process
