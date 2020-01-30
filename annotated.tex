@@ -97,8 +97,16 @@ attacker nodes.
 
 \section{Transactions}\label{transactions}
 
-\newthought{We define} an electronic coin as a chain of digital signatures. Each
-owner transfers the coin to the next by digitally signing a hash of the
+\newthought{We define} an electronic coin as a chain of digital signatures.
+\footnote{
+Every bitcoin address is actually the hash of a locking script, or \emph{encumbrance}, which can be opened with the appropriate unlocking script.   Locking and unlocking scripts, are written in a language Satoshi called simply "Script".  Whenever the text reads "signature", you should think of "unlocking script"; similarly, wherever "public key" arises, think of "locking script".  In Bitcoin parlance, the unlocking script is usually called \texttt{scriptSig} and the locking script is called \texttt{scriptPubKey}, in recognition of the most common case where the signature is needed to unlock spending to a public key.
+}
+
+\marginnote{
+Script allows more complex transfers than a sender to a single recipient.  More general encumbrances could be multi-signature or require the solution to a puzzle, such as pre-image to a hash function.
+}
+
+Each owner transfers the coin to the next by digitally signing a hash of the
 previous transaction and the public key of the next owner and adding
 these to the end of the coin. A payee can verify the signatures to
 verify the chain of ownership.
