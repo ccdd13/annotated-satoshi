@@ -1,15 +1,13 @@
-%\documentclass[a4paper, 10pt]{article}
-%\documentclass[nobib]{tufte-handout}
 \documentclass[nohyper]{tufte-handout}
 
-%encoding
-%---------------------------------------------------------
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-%----------------------------------------------------------------------
+%%encoding
+%%---------------------------------------------------------
+%\usepackage[utf8]{inputenc}
+%\usepackage[T1]{fontenc}
+%%----------------------------------------------------------------------
 
 \usepackage{graphicx} % allow embedded images
-  \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+  %\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
   \graphicspath{{img/}} % set of paths to search for images
 %\usepackage[english]{babel}
 \usepackage{amsmath}
@@ -23,6 +21,7 @@
 \usepackage{fancyvrb} % extended verbatim environments
   \fvset{fontsize=\normalsize}% default font size for fancy-verbatim environments
 
+\usepackage{url}
 \usepackage{hyperref}
 \hypersetup{colorlinks=true}
 \usepackage{listings}
@@ -30,7 +29,6 @@
 \usepackage[shortlabels]{enumitem}
 %\usepackage{natbib}
 %\setcitestyle{square, number}
-%\bibliographystyle{plainnat}
 \usepackage{xstring}
 \usepackage{catchfile}
 \usepackage{microtype}
@@ -532,6 +530,6 @@ and rejecting invalid blocks by refusing to work on them. Any needed
 rules and incentives can be enforced with this consensus mechanism.
 
 \bibliography{refs}
-
+\bibliographystyle{plainnat}
 
 \end{document}
