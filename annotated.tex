@@ -1,6 +1,6 @@
 %\documentclass[a4paper, 10pt]{article}
 %\documentclass[nobib]{tufte-handout}
-\documentclass{tufte-handout}
+\documentclass[nohyper]{tufte-handout}
 
 %encoding
 %---------------------------------------------------------
@@ -25,20 +25,27 @@
   \fvset{fontsize=\normalsize}% default font size for fancy-verbatim environments
 
 \usepackage{hyperref}
+\hypersetup{colorlinks=true}
 \usepackage{listings}
 \usepackage{verbatim}
 \usepackage[shortlabels]{enumitem}
 %\usepackage{natbib}
 %\setcitestyle{square, number}
 %\bibliographystyle{plainnat}
+\usepackage{xstring}
+\usepackage{catchfile}
+
+\CatchFileDef{\headfull}{.git/HEAD}{}
+\StrGobbleRight{\headfull}{1}[\head]
+\StrBehind[2]{\head}{/}[\branch]
+\CatchFileDef{\commit}{.git/refs/heads/\branch}{}
 
 \begin{document}
 \renewcommand{\abstractname}{\vspace{-\baselineskip}}
 
 \title{Bitcoin: A Peer-to-Peer Electronic Cash System}
-\author{Satoshi Nakamoto %\\ 
-%\href{mailto:satoshin@gmx.com}{satoshin@gmx.com}\\ \url{http://www.bitcoin.org/}
-}
+\author{Satoshi Nakamoto ({satoshin@gmx.com}, 
+\href{http://www.bitcoin.org}{bitcoin.org})}
 \date{}
 
 
@@ -53,8 +60,10 @@ peer-to-peer network. The network timestamps transactions by hashing them into a
 \end{center}
 \end{fullwidth}
 
-
-\section{Introduction}\label{introduction}\marginnote{The original whitepaper has no foot or margin notes.  These are further details or clarifications that have been added, particularly in light of Bitcoin development in the last 10 years.}
+\section{Introduction}\label{introduction}
+\marginnote{The original whitepaper has no footnotes or margin notes.  We have added these to give further details or clarifications, including changes that have occurred in the Bitcoin implementation.} 
+\marginnote{Suggestions and corrections to this document are welcome and may be submitted via pull request at its \href{https://github.com/chanhosuh/annotated-satoshi}{GitHub repository}.}
+\marginnote{Revision \texttt{\commit} on branch \texttt{\branch}.}
 
 \newthought{Commerce on the Internet} has come to rely almost exclusively on
 financial institutions serving as trusted third parties to process
@@ -236,7 +245,7 @@ in memory.
 \section{Simplified Payment
 Verification}\label{simplified-payment-verification}
 
-It is possible to verify payments without running a full network node. A
+It is possible to verify payments without running a full network node.\footnote{By "full network node", Satoshi means node that does full validation alongside mining.  The original Bitcoin client required mining.  Current version of Bitcoin Core allow a node to run full validation on blocks without mining.} A
 user only needs to keep a copy of the block headers of the longest
 proof-of-work chain, which he can get by querying network nodes until
 he's convinced he has the longest chain, and obtain the Merkle branch
