@@ -1,35 +1,49 @@
-\documentclass[a4paper, 10pt]{article}
+%\documentclass[a4paper, 10pt]{article}
+%\documentclass[nobib]{tufte-handout}
+\documentclass{tufte-handout}
+
 %encoding
 %---------------------------------------------------------
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 %----------------------------------------------------------------------
-\usepackage{geometry}
-\geometry{left=3cm,right=3cm,top=2.5cm,bottom=2.5cm}
+\usepackage{microtype}
+
+\usepackage{graphicx} % allow embedded images
+  \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+  \graphicspath{{img/}} % set of paths to search for images
 \usepackage[english]{babel}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{array}
-\usepackage{graphicx}
-\graphicspath{ {img/} }
+
+\usepackage{booktabs} % book-quality tables
+\usepackage{units}    % non-stacked fractions and better unit spacing
+\usepackage{multicol} % multiple column layout facilities
+\usepackage{fancyvrb} % extended verbatim environments
+  \fvset{fontsize=\normalsize}% default font size for fancy-verbatim environments
+
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{verbatim}
 \usepackage[shortlabels]{enumitem}
-\usepackage[sorting=none]{biblatex}
-\bibliography{refs}
+%\usepackage{natbib}
+%\setcitestyle{square, number}
+%\bibliographystyle{plainnat}
 
 \begin{document}
 \renewcommand{\abstractname}{\vspace{-\baselineskip}}
 
 \title{Bitcoin: A Peer-to-Peer Electronic Cash System}
-\author{Satoshi Nakamoto \\ 
-\href{mailto:satoshin@gmx.com}{satoshin@gmx.com}\\ \url{http://www.bitcoin.org/}}
+\author{Satoshi Nakamoto %\\ 
+%\href{mailto:satoshin@gmx.com}{satoshin@gmx.com}\\ \url{http://www.bitcoin.org/}
+}
 \date{}
 
 
 \maketitle
+\begin{fullwidth}
 \begin{center}
 \parbox{0.8\linewidth}{\noindent \textbf{Abstract.} A purely peer-to-peer version of electronic cash would allow online payments to be sent directly from one party to
 another without going through a financial institution. Digital
@@ -37,12 +51,12 @@ signatures provide part of the solution, but the main benefits are lost if a tru
 We propose a solution to the double-spending problem using a
 peer-to-peer network. The network timestamps transactions by hashing them into an ongoing chain of hash-based proof-of-work, forming a record that cannot be changed without redoing the proof-of-work. The longest chain not only serves as proof of the sequence of events witnessed, but proof that it came from the largest pool of CPU power. As long as a majority of CPU power is controlled by nodes that are not cooperating to attack the network, they'll generate the longest chain and outpace attackers. The network itself requires minimal structure. Messages are broadcast on a best effort basis, and nodes can leave and rejoin the network at will, accepting the longest proof-of-work chain as proof of what happened while they were gone.}
 \end{center}
+\end{fullwidth}
 
-\
 
-\section{Introduction}\label{introduction}
+\section{Introduction}\label{introduction}\marginnote{The original whitepaper has no foot or margin notes.  These are further details or clarifications that have been added, particularly in light of Bitcoin development in the last 10 years.}
 
-Commerce on the Internet has come to rely almost exclusively on
+\newthought{Commerce on the Internet} has come to rely almost exclusively on
 financial institutions serving as trusted third parties to process
 electronic payments. While the system works well enough for most
 transactions, it still suffers from the inherent weaknesses of the trust
@@ -67,15 +81,13 @@ protect sellers from fraud, and routine escrow mechanisms could easily
 be implemented to protect buyers. In this paper, we propose a solution
 to the double-spending problem using a peer-to-peer distributed
 timestamp server to generate computational proof of the chronological
-order of transactions. The system is secure as long as honest nodes
+order of transactions.  \footnote{Satoshi emphasizes his solution is a timestamp server which orders data.  Proof-of-work (POW) provides a consensus mechanism for securing the ordered data. This shows Satoshi understands that digital currency is just one application of blockchain technology.} The system is secure as long as honest nodes
 collectively control more CPU power than any cooperating group of
 attacker nodes.
 
-\newpage
-
 \section{Transactions}\label{transactions}
 
-We define an electronic coin as a chain of digital signatures. Each
+\newthought{We define} an electronic coin as a chain of digital signatures. Each
 owner transfers the coin to the next by digitally signing a hash of the
 previous transaction and the public key of the next owner and adding
 these to the end of the coin. A payee can verify the signatures to
@@ -98,7 +110,7 @@ publicly announced\cite{dai98}, and we need a system for participants to agree o
 
 \section{Timestamp Server}\label{timestamp-server}
 
-The solution we propose begins with a timestamp server. A timestamp
+\newthought{The solution} we propose begins with a timestamp server. A timestamp
 server works by taking a hash of a block of items to be timestamped and
 widely publishing the hash, such as in a newspaper or Usenet
 post\cite{mas99}\cite{hab90}\cite{bay93}\cite{hab97}. The timestamp proves that the data must have existed
@@ -113,7 +125,7 @@ additional timestamp reinforcing the ones before it.
 
 \section{Proof-of-Work}\label{proof-of-work}
 
-To implement a distributed timestamp server on a peer-to-peer basis, we
+\newthought{To implement} a distributed timestamp server on a peer-to-peer basis, we
 will need to use a proof-of-work system similar to Adam Back's Hashcash
 \cite{bac02}, rather than newspaper or Usenet posts. The
 proof-of-work involves scanning for a value that when hashed, such as
@@ -122,11 +134,11 @@ work required is exponential in the number of zero bits required and can be veri
 
 For our timestamp network, we implement the proof-of-work by
 incrementing a nonce in the block until a value is found that gives the
-block's hash the required zero bits. Once the CPU effort has been
+block's hash the required zero bits. \footnote{In practice, at current difficulty levels, miners must use an "extra nonce" field in the coinbase transaction. } Once the CPU effort has been
 expended to make it satisfy the proof-of-work, the block cannot be
 changed without redoing the work. As later blocks are chained after it,
 the work to change the block would include redoing all the blocks after
-it
+it.
 
 \begin{figure}[!h]
 \centering
@@ -137,11 +149,12 @@ The proof-of-work also solves the problem of determining representation
 in majority decision making. If the majority were based on
 one-IP-address-one-vote, it could be subverted by anyone able to
 allocate many IPs. Proof-of-work is essentially one-CPU-one-vote. The
-majority decision is represented by the longest chain, which has the greatest proof-of-work effort invested in it. If a majority of CPU power is controlled by honest nodes, the honest chain will grow the fastest and outpace any competing chains. To modify a past block, an attacker would have to redo the proof-of-work of the block and all blocks after
+majority decision is represented by the longest chain, which has the greatest proof-of-work effort invested in it.  \footnote{By "longest chain" Satoshi always means the chain with the greatest total POW.  This is essentially the sum of the difficulties of the blocks.  More precisely, it is the expected value of the number of hashes needed to produce a chain of blocks of those particular difficulties.} If a majority of CPU power is controlled by honest nodes, the honest chain will grow the fastest and outpace any competing chains. To modify a past block, an attacker would have to redo the proof-of-work of the block and all blocks after
 it and then catch up with and surpass the work of the honest nodes. We will show later that the probability of a slower attacker catching up
 diminishes exponentially as subsequent blocks are added.
 
-To compensate for increasing hardware speed and varying interest in running nodes over time, the proof-of-work difficulty is determined by a moving average targeting an average number of blocks per hour. If they're generated too fast, the difficulty increases.
+\marginnote{Difficulty is defined as the reciprocal of the \emph{target}, which is a 32 byte integer.  A block is successful mined when the block header hash is below the target value. \\Difficulty is adjusted every 2016 blocks by computing the }
+To compensate for increasing hardware speed and varying interest in running nodes over time, the proof-of-work difficulty is determined by a moving average targeting an average number of blocks per hour. If they're generated too fast, the difficulty increases.  
 
 \section{Network}\label{network}
 
@@ -174,8 +187,8 @@ As long as they reach many nodes, they will get into a block before long. Block 
 
 \section{Incentive}\label{incentive}
 
-By convention, the first transaction in a block is a special transaction
-that starts a new coin owned by the creator of the block. This adds an
+\newthought{By convention}, the first transaction in a block is a special transaction
+that starts a new coin owned by the creator of the block.  \footnote{This is the "coinbase" transaction.  Its input is effectively set to null values.  It is allowed to have one output with an "OP\_RETURN" script, which allows storing of up to 80 bytes of arbitrary data.  By BIP ?, this data must include the block height.  The "extra nonce" is also part of the data, as the nonce field in the block header is not sufficient for mining at current difficulties.} This adds an
 incentive for nodes to support the network, and provides a way to
 initially distribute coins into circulation, since there is no central
 authority to issue them. The steady addition of a constant of amount of
@@ -196,11 +209,11 @@ he would have to choose between using it to defraud people by stealing
 back his payments, or using it to generate new coins. He ought to find
 it more profitable to play by the rules, such rules that favour him with
 more new coins than everyone else combined, than to undermine the system
-and the validity of his own wealth.
+and the validity of his own wealth.  \footnote{This still leaves the system vulnerable to a "Goldfinger attack", e.g. any attack motivated by political or ideological motives.}
 
 \section{Reclaiming Disk Space}\label{reclaiming-disk-space}
 
-Once the latest transaction in a coin is buried under enough blocks, the
+\newthought{Once the latest transaction} in a coin is buried under enough blocks, the
 spent transactions before it can be discarded to save disk space. To
 facilitate this without breaking the block's hash, transactions are
 hashed in a Merkle Tree\cite{mer80}\cite{mas99}\cite{hab97}, with only the root included in the block's hash. Old
@@ -212,14 +225,13 @@ interior hashes do not need to be stored.
 \includegraphics[width=0.75\linewidth]{reclaiming-disk.png}
 \end{figure}
 
-A block header with no transactions would be about 80 bytes. If we
-suppose blocks are generated every 10 minutes, 80 bytes * 6 * 24 * 365 =
+A block header with no transactions would be about 80 bytes.  \footnote{A block header is in fact precisely 80 bytes.} If we
+suppose blocks are generated every 10 minutes\footnote{The difficulty adjustment is based on an average value of 10 minutes to mine a block.}, 80 bytes * 6 * 24 * 365 =
 4.2MB per year. With computer systems typically selling with 2GB of RAM
 as of 2008, and Moore's Law predicting current growth of 1.2GB per year,
 storage should not be a problem even if the block headers must be kept
 in memory.
 
-\newpage
 
 \section{Simplified Payment
 Verification}\label{simplified-payment-verification}
@@ -241,7 +253,7 @@ it further confirm the network has accepted it.
 
 As such, the verification is reliable as long as honest nodes control
 the network, but is more vulnerable if the network is overpowered by an
-attacker. While network nodes can verify transactions for themselves,
+attacker.  \footnote{With the current p2p protocol, a light node needs to connect to only one honest node to recognize the main chain.  So a "Sybil attack" can only be successful if the light node is completely isolated from honest nodes.} While network nodes can verify transactions for themselves,
 the simplified method can be fooled by an attacker's fabricated
 transactions for as long as the attacker can continue to overpower the
 network. One strategy to protect against this would be to accept alerts
@@ -283,11 +295,11 @@ The traditional banking model achieves a level of privacy by limiting access to 
 \end{figure}
 
 As an additional firewall, a new key pair should be used for each
-transaction to keep them from being linked to a common owner. Some
+transaction to keep them from being linked to a common owner.  \footnote{Hierarchical deterministic (HD) wallets provide this protection by generating an essentially infinite supply of keys for use from a root seed, usually represented by a 24 word mnemonic (BIP ?).} Some
 linking is still unavoidable with multi-input transactions, which
 necessarily reveal that their inputs were owned by the same owner. The
 risk is that if the owner of a key is revealed, linking could reveal
-other transactions that belonged to the same owner.
+other transactions that belonged to the same owner.  \footnote{Satoshi recognizes the danger of "linking", but he does not propose a solution.}
 
 \section{Calculations}\label{calculations}
 
@@ -356,7 +368,7 @@ The recipient waits until the transaction has been added to a block and
 z blocks have been linked after it. He doesn't know the exact amount of
 progress the attacker has made, but assuming the honest blocks took the
 average expected time per block, the attacker's potential progress will
-be a Poisson distribution with expected value:
+be a Poisson distribution with expected value:\footnote{The assumption on the time to generate the honest blocks nails down the number of hashes the honest miners needed.  Since the attacker's hashrate is in ratio $\frac{q}{p}$, this gives the formula for $\lambda$.  Technically it may be more correct to consider a binomial distribution here, but the Poisson distribution is a very good approximation and is more handy for calculations here.}
 
 \[\lambda = z \ \frac{q}{p}\]
 
@@ -439,7 +451,7 @@ z=45 P=0.0000024
 z=50 P=0.0000006
 \end{verbatim}
 
-Solving for P less than 0.1\%\ldots{}
+Solving for P less than 0.1\%\ldots{}\marginnote{This table is apparently the basis for the "6 confirmations" rule-of-thumb.  Note, however, that it only shows that 6 confirmations gives less than a 0.1\% chance of fraud for an attacker with 10\% of the hashrate.  Fending off a stronger attacker, such as one of the major mining pools, or reducing the chance of fraud to less than 1 in a 1000 would require significantly more confirmations.}
 
 \begin{verbatim}
 P < 0.001
@@ -473,9 +485,7 @@ expressing their acceptance of valid blocks by working on extending them
 and rejecting invalid blocks by refusing to work on them. Any needed
 rules and incentives can be enforced with this consensus mechanism.
 
-\newpage
-
-\printbibliography
+\bibliography{refs}
 
 
 \end{document}
