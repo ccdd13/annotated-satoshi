@@ -11,11 +11,11 @@
 \usepackage{graphicx} % allow embedded images
   \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
   \graphicspath{{img/}} % set of paths to search for images
-\usepackage[english]{babel}
+%\usepackage[english]{babel}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
-\usepackage{array}
+%\usepackage{array}
 
 \usepackage{booktabs} % book-quality tables
 \usepackage{units}    % non-stacked fractions and better unit spacing
@@ -231,7 +231,7 @@ and the validity of his own wealth.  \footnote{This still leaves the system vuln
 
 \section{Reclaiming Disk Space}\label{reclaiming-disk-space}
 
-\newthought{Once the latest transaction} in a coin is buried under enough blocks, the
+\newthought{Once the latest} transaction in a coin is buried under enough blocks, the
 spent transactions before it can be discarded to save disk space. To
 facilitate this without breaking the block's hash, transactions are
 hashed in a Merkle Tree\cite{mer80}\cite{mas99}\cite{hab97}, with only the root included in the block's hash. Old
@@ -254,8 +254,7 @@ in memory.
 \section{Simplified Payment
 Verification}\label{simplified-payment-verification}
 
-It is possible to verify payments without running a full network node.\footnote{By "full network node", Satoshi means node that does full validation alongside mining.  The original Bitcoin client required mining.  Current version of Bitcoin Core allow a node to run full validation on blocks without mining.} A
-user only needs to keep a copy of the block headers of the longest
+\newthought{It is possible} to verify payments without running a full network node.\footnote{By "full network node", Satoshi means node that does full validation alongside mining.  The original Bitcoin client required mining.  Current version of Bitcoin Core allow a node to run full validation on blocks without mining.} A user only needs to keep a copy of the block headers of the longest
 proof-of-work chain, which he can get by querying network nodes until
 he's convinced he has the longest chain, and obtain the Merkle branch
 linking the transaction to the block it's timestamped in. He can't check
@@ -284,7 +283,7 @@ security and quicker verification.
 \section{Combining and Splitting
 Value}\label{combining-and-splitting-value}
 
-Although it would be possible to handle coins individually, it would be
+\newthought{Although} it would be possible to handle coins individually, it would be
 unwieldy to make a separate transaction for every cent in a transfer. To
 allow value to be split and combined, transactions contain multiple
 inputs and outputs. Normally there will be either a single input from a
@@ -305,7 +304,7 @@ copy of a transaction's history.
 
 \section{Privacy}\label{privacy}
 
-The traditional banking model achieves a level of privacy by limiting access to information to the parties involved and the trusted third party. The necessity to announce all transactions publicly precludes this method, but privacy can still be maintained by breaking the flow of information in another place: by keeping public keys anonymous. The public can see that someone is sending an amount to someone else, but without information linking the transaction to anyone. This is similar to the level of information released by stock exchanges, where the time and size of individual trades, the ``tape'', is made public, but without telling who the parties were.
+\newthought{The traditional banking} model achieves a level of privacy by limiting access to information to the parties involved and the trusted third party. The necessity to announce all transactions publicly precludes this method, but privacy can still be maintained by breaking the flow of information in another place: by keeping public keys anonymous. The public can see that someone is sending an amount to someone else, but without information linking the transaction to anyone. This is similar to the level of information released by stock exchanges, where the time and size of individual trades, the ``tape'', is made public, but without telling who the parties were.
 
 \begin{figure}[!h]
 \centering
@@ -321,7 +320,7 @@ other transactions that belonged to the same owner.  \footnote{Satoshi recognize
 
 \section{Calculations}\label{calculations}
 
-We consider the scenario of an attacker trying to generate an alternate
+\newthought{We consider} the scenario of an attacker trying to generate an alternate
 chain faster than the honest chain. Even if this is accomplished, it
 does not throw the system open to arbitrary changes, such as creating
 value out of thin air or taking money that never belonged to the
@@ -351,17 +350,17 @@ honest chain, as follows\cite{fel57}:
 
 \(q_z\) = {\small probability the attacker will ever catch up from z blocks behind}
 
-\[
+\begin{equation}
     q_z = 
 \begin{cases}
     1               & \text{if } p \leqslant q\\
     \left(q/p\right)^z & \text{if } p > q
 \end{cases}
-\]
+\end{equation}
 
 \
 
-Given our assumption that p \textgreater{} q, the probability drops
+Given our assumption that $p > q$, the probability drops
 exponentially as the number of blocks the attacker has to catch up with
 increases. With the odds against him, if he doesn't make a lucky lunge
 forward early on, his chances become vanishingly small as he falls
@@ -383,12 +382,14 @@ working in secret on a parallel chain containing an alternate version of
 his transaction.
 
 The recipient waits until the transaction has been added to a block and
-z blocks have been linked after it. He doesn't know the exact amount of
+$z$ blocks have been linked after it. He doesn't know the exact amount of
 progress the attacker has made, but assuming the honest blocks took the
 average expected time per block, the attacker's potential progress will
 be a Poisson distribution with expected value:\footnote{The assumption on the time to generate the honest blocks nails down the number of hashes the honest miners needed.  Since the attacker's hashrate is in ratio $\frac{q}{p}$, this gives the formula for $\lambda$.  Technically it may be more correct to consider a binomial distribution here, but the Poisson distribution is a very good approximation and is more handy for calculations here.}
 
-\[\lambda = z \ \frac{q}{p}\]
+\begin{equation}
+\lambda = z \ \frac{q}{p}
+\end{equation}
 
 \
 
@@ -396,25 +397,48 @@ To get the probability the attacker could still catch up now, we
 multiply the Poisson density for each amount of progress he could have
 made by the probability he could catch up from that point:
 
-\[\sum _{k=0}^\infty \frac{\lambda ^k e^{-\lambda}}{k!} \cdot 
+\begin{equation}
+\sum _{k=0}^\infty \frac{\lambda ^k e^{-\lambda}}{k!} \cdot 
 \begin{cases}
     \left(q/p\right)^{(z-p)} & \text{if } k \leqslant z \\
     1                     & \text{if } k > z
 \end{cases}
-\]
+\end{equation}
 
 \
 
 Rearranging to avoid summing the infinite tail of the
 distribution\ldots{}
 
-\[1 - \sum _{k=0}^z \frac{\lambda ^k e^{-\lambda}}{k!} \left(1 - \left(q/p\right)^{(z-k)}\right)\]
+ 
+\begin{equation}
+1 - \sum _{k=0}^z \frac{\lambda ^k e^{-\lambda}}{k!} \left(1 - \left(q/p\right)^{(z-k)}\right)
+\end{equation}
 
 \
 
 Converting to C code\ldots{}
 
-\begin{lstlisting}[language=C]
+\
+
+\lstset{ 
+    language=C, % choose the language of the code
+     basicstyle=\ttfamily,
+       columns=fullflexible,
+    numbers=none, % where to put the line-numbers
+    numberstyle=\tiny, % the size of the fonts that are used for the line-numbers     
+    showspaces=false, % show spaces adding particular underscores
+    showstringspaces=false, % underline spaces within strings
+    showtabs=false, % show tabs within strings adding particular underscores
+    frame=single, % adds a frame around the code
+    tabsize=4, % sets default tabsize to 2 spaces
+    captionpos=b, % sets the caption-position to bottom
+    breaklines=true, % sets automatic line breaking
+    breakatwhitespace=false, 
+    backgroundcolor=\color{gray!8},  
+}
+
+\begin{lstlisting}
 #include <math.h>
 double AttackerSuccessProbability(double q, int z)
 {
@@ -436,7 +460,7 @@ double AttackerSuccessProbability(double q, int z)
 \
 
 Running some results, we can see the probability drop off exponentially
-with z.
+with $z$.
 
 \
 
@@ -469,7 +493,11 @@ z=45 P=0.0000024
 z=50 P=0.0000006
 \end{verbatim}
 
-Solving for P less than 0.1\%\ldots{}\marginnote{This table is apparently the basis for the "6 confirmations" rule-of-thumb.  Note, however, that it only shows that 6 confirmations gives less than a 0.1\% chance of fraud for an attacker with 10\% of the hashrate.  Fending off a stronger attacker, such as one of the major mining pools, or reducing the chance of fraud to less than 1 in a 1000 would require significantly more confirmations.}
+\
+
+Solving for $P$ less than 0.1\%\ldots{}\marginnote{This table is apparently the basis for the "6 confirmations" rule-of-thumb.  Note, however, that it only shows that 6 confirmations gives less than a 0.1\% chance of fraud for an attacker with 10\% of the hashrate.  Fending off a stronger attacker, such as one of the major mining pools, or reducing the chance of fraud to less than 1 in a 1000 would require significantly more confirmations.}
+
+\
 
 \begin{verbatim}
 P < 0.001
@@ -486,7 +514,7 @@ q=0.45 z=340
 
 \section{Conclusion}\label{conclusion}
 
-We have proposed a system for electronic transactions without relying on
+\newthought{We have proposed} a system for electronic transactions without relying on
 trust. We started with the usual framework of coins made from digital
 signatures, which provides strong control of ownership, but is
 incomplete without a way to prevent double-spending. To solve this, we
