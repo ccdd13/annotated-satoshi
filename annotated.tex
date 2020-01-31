@@ -97,10 +97,8 @@ attacker nodes.
 
 \newthought{We define} an electronic coin as a chain of digital signatures.
 \footnote{
-Every bitcoin address is actually the hash of a locking script, or \emph{encumbrance}, which can be opened with the appropriate unlocking script.   Locking and unlocking scripts, are written in a language Satoshi called simply "Script".  Whenever the text reads "signature", you should think of "unlocking script"; similarly, wherever "public key" arises, think of "locking script".  In Bitcoin parlance, the unlocking script is usually called \texttt{scriptSig} and the locking script is called \texttt{scriptPubKey}, in recognition of the most common case where the signature is needed to unlock spending to a public key.
-}
-
-\marginnote{
+Every bitcoin address is actually the hash of a locking script, or \emph{encumbrance}, which can be opened with the appropriate unlocking script.   Locking and unlocking scripts, are written in a language Satoshi called simply "Script".\\
+Whenever the text reads "signature", you should think of "unlocking script"; similarly, wherever "public key" arises, think of "locking script".  In Bitcoin parlance, the unlocking script is called \texttt{scriptSig} and the locking script is called \texttt{scriptPubKey}, in recognition of the most common case where the signature is needed to unlock spending to a public key.\\
 Script allows more complex transfers than a sender to a single recipient.  More general encumbrances could be multi-signature or require the solution to a puzzle, such as pre-image to a hash function.
 }
 
@@ -143,14 +141,14 @@ additional timestamp reinforcing the ones before it.
 
 \newthought{To implement} a distributed timestamp server on a peer-to-peer basis, we
 will need to use a proof-of-work system similar to Adam Back's Hashcash
-\cite{bac02}, rather than newspaper or Usenet posts. The
+\cite[-0.4in]{bac02}, rather than newspaper or Usenet posts. The
 proof-of-work involves scanning for a value that when hashed, such as
 with SHA-256, the hash begins with a number of zero bits. The average
 work required is exponential in the number of zero bits required and can be verified by executing a single hash.
 
 For our timestamp network, we implement the proof-of-work by
-incrementing a nonce in the block until a value is found that gives the
-block's hash the required zero bits. \footnote{In practice, at current difficulty levels, miners must use an "extra nonce" field in the coinbase transaction. } Once the CPU effort has been
+incrementing a nonce\footnote[][-1in]{At current difficulty levels, the nonce's 4 bytes do not provide for enough randomness, so miners must change the block in other ways, such changing the merkle root in the block header by re-ordering transactions.\\In practice, miners use the \emph{extranonce}, a portion of coinbase input's \texttt{scriptSig}.  This \texttt{scriptSig} not only houses the extranonce, but starts with the block height, due to BIP 34, to disallow a transaction malleability attack.  For Segwit blocks, it also contains the merkle root for the witnesses.} in the block until a value is found that gives the
+block's hash\footnote[][0.1in]{It is the block header, not the block itself, that is hashed.  A block is comprised of the header, followed by the number of transactions, and then the list of transactions themselves.  The block header contains the merkle root for the transactions, which secures the transactions so they can't be modified without changing the merkle root and thus the header.} the required zero bits. Once the CPU effort has been
 expended to make it satisfy the proof-of-work, the block cannot be
 changed without redoing the work. As later blocks are chained after it,
 the work to change the block would include redoing all the blocks after
