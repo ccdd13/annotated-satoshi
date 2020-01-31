@@ -129,7 +129,7 @@ publicly announced\cite{dai98}, and we need a system for participants to agree o
 \newthought{The solution} we propose begins with a timestamp server. A timestamp
 server works by taking a hash of a block of items to be timestamped and
 widely publishing the hash, such as in a newspaper or Usenet
-post\cite{mas99}\cite{hab90}\cite{bay93}\cite{hab97}. The timestamp proves that the data must have existed
+post\cite[-1.5in]{mas99}\cite[-0.625in]{hab90}\cite[-0.2in]{bay93}\cite[0in]{hab97}. The timestamp proves that the data must have existed
 at the time, obviously, in order to get into the hash. Each timestamp
 includes the previous timestamp in its hash, forming a chain, with each
 additional timestamp reinforcing the ones before it.
@@ -225,14 +225,14 @@ he would have to choose between using it to defraud people by stealing
 back his payments, or using it to generate new coins. He ought to find
 it more profitable to play by the rules, such rules that favour him with
 more new coins than everyone else combined, than to undermine the system
-and the validity of his own wealth.  \footnote{This still leaves the system vulnerable to a "Goldfinger attack", e.g. any attack motivated by political or ideological motives.}
+and the validity of his own wealth.  \footnote[][-1in]{This still leaves the system vulnerable to a "Goldfinger attack", e.g. any attack motivated by political or ideological motives.}
 
 \section{Reclaiming Disk Space}\label{reclaiming-disk-space}
 
 \newthought{Once the latest} transaction in a coin is buried under enough blocks, the
 spent transactions before it can be discarded to save disk space. To
 facilitate this without breaking the block's hash, transactions are
-hashed in a Merkle Tree\cite{mer80}\cite{mas99}\cite{hab97}, with only the root included in the block's hash. Old
+hashed in a Merkle Tree\cite[-1.7in]{mer80}\cite[-1.1in]{mas99}\cite[-0.25in]{hab97}, with only the root included in the block's hash. Old
 blocks can then be compacted by stubbing off branches of the tree. The
 interior hashes do not need to be stored.
 
@@ -268,7 +268,7 @@ it further confirm the network has accepted it.
 
 As such, the verification is reliable as long as honest nodes control
 the network, but is more vulnerable if the network is overpowered by an
-attacker.  \footnote{With the current p2p protocol, a light node needs to connect to only one honest node to recognize the main chain.  So a "Sybil attack" can only be successful if the light node is completely isolated from honest nodes.} While network nodes can verify transactions for themselves,
+attacker.  \footnote[][-0.5in]{With the current p2p protocol, a light node needs to connect to only one honest node to recognize the main chain.  So a "Sybil attack" can only be successful if the light node is completely isolated from honest nodes.} While network nodes can verify transactions for themselves,
 the simplified method can be fooled by an attacker's fabricated
 transactions for as long as the attacker can continue to overpower the
 network. One strategy to protect against this would be to accept alerts
