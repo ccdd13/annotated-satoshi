@@ -119,7 +119,7 @@ transaction is the one that counts, so we don't care about later
 attempts to double-spend. The only way to confirm the absence of a
 transaction is to be aware of all transactions. In the mint based model, the mint was aware of all transactions and decided which arrived first.
 To accomplish this without a trusted party, transactions must be
-publicly announced\cite{dai98}, and we need a system for participants to agree on a single history of the order in which they were received. The payee needs proof that at the time of each transaction, the majority of nodes agreed it was the first received.
+publicly announced\cite[-0.1in]{dai98}, and we need a system for participants to agree on a single history of the order in which they were received. The payee needs proof that at the time of each transaction, the majority of nodes agreed it was the first received.
 
 \section{Timestamp Server}\label{timestamp-server}
 
@@ -140,18 +140,43 @@ additional timestamp reinforcing the ones before it.
 
 \newthought{To implement} a distributed timestamp server on a peer-to-peer basis, we
 will need to use a proof-of-work system similar to Adam Back's Hashcash
-\cite[-0.4in]{bac02}, rather than newspaper or Usenet posts. The
+\cite[-0.75in]{bac02}, rather than newspaper or Usenet posts. The
 proof-of-work involves scanning for a value that when hashed, such as
 with SHA-256, the hash begins with a number of zero bits. The average
 work required is exponential in the number of zero bits required and can be verified by executing a single hash.
 
+
+
 For our timestamp network, we implement the proof-of-work by
-incrementing a nonce\footnote[][-1in]{At current difficulty levels, the nonce's 4 bytes do not provide enough hashes, so miners must change the block in other ways, such changing the merkle root in the block header by re-ordering transactions.\\In practice, miners use the \emph{extranonce}, a portion of coinbase input's \texttt{scriptSig}.  This \texttt{scriptSig} not only houses the extranonce, but starts with the block height, due to BIP 34, to disallow a transaction malleability attack.  For Segwit blocks, it also contains the merkle root for the witnesses.} in the block until a value is found that gives the
-block's hash\footnote[][0.1in]{It is the block header, not the block itself, that is hashed.  A block is comprised of the header, followed by the number of transactions, and then the list of transactions themselves.  The block header contains the merkle root for the transactions, which secures the transactions so they can't be modified without changing the merkle root and thus the header.} the required zero bits. Once the CPU effort has been
+incrementing a nonce\footnote[][-1.3in]{At current difficulty levels, the nonce's 4 bytes do not provide enough hashes, so miners must change the block in other ways, such changing the merkle root in the block header by re-ordering transactions.\\In practice, miners use the \emph{extranonce}, a portion of coinbase input's \texttt{scriptSig}.  This \texttt{scriptSig} not only houses the extranonce, but starts with the block height, due to BIP 34, to disallow a transaction malleability attack.  For Segwit blocks, it also contains the merkle root for the witnesses.} in the block until a value is found that gives the
+block's hash\footnote[][0.1in]{It is the block header, not the block itself, that is hashed.  A block is comprised of the header followed by the list of transactions.}
+the required zero bits. Once the CPU effort has been
 expended to make it satisfy the proof-of-work, the block cannot be
 changed without redoing the work. As later blocks are chained after it,
 the work to change the block would include redoing all the blocks after
 it.
+
+\marginnote[0.1in]{
+\noindent\fbox{%
+    \parbox{2.45in}{%
+Block header:\\[0.04in]
+
+\textcolor{blue}{00c0ff3f}\textcolor{red}{6452255a2f9c192c4f0cb09029058bf427c295d0\\4bc109000000000000000000}\textcolor{cyan}{581267a8e88b6c7c8234af\\c16cc089e2ebbacc177ec018ff4498398e1115b3c5}\textcolor{magenta}{f9da3\\45e}\textcolor{teal}{ff321217}\textcolor{lime}{3b247c3d}
+}
+}
+
+version - \textcolor{blue}{00c0ff3f}\\
+prev block header hash - \textcolor{red}{6452255...}\\
+merkle root - \textcolor{cyan}{581267a...}\\
+time - \textcolor{magenta}{f9da345e}\\
+nBits - \textcolor{teal}{ff321217}\\
+nonce - \textcolor{lime}{3b247c3d}\\
+
+Block header hash:\\
+\textcolor{darkgray}{00000000000000000002f01e49c839b\\
+7e13be20fba241f112e9a4634c4ece2c0}
+}
+
 
 \begin{figure}[!h]
 \centering
@@ -162,12 +187,12 @@ The proof-of-work also solves the problem of determining representation
 in majority decision making. If the majority were based on
 one-IP-address-one-vote, it could be subverted by anyone able to
 allocate many IPs. Proof-of-work is essentially one-CPU-one-vote. The
-majority decision is represented by the longest chain, which has the greatest proof-of-work effort invested in it.  \footnote{By "longest chain" Satoshi always means the chain with the greatest total POW.  This is essentially the sum of the difficulties of the blocks.  More precisely, it is the expected value of the number of hashes needed to produce a chain of blocks of those particular difficulties.} If a majority of CPU power is controlled by honest nodes, the honest chain will grow the fastest and outpace any competing chains. To modify a past block, an attacker would have to redo the proof-of-work of the block and all blocks after
+majority decision is represented by the longest chain, which has the greatest proof-of-work effort invested in it.\footnote{By "longest chain" Satoshi always means the chain with the greatest total POW.  This is essentially the sum of the difficulties of the blocks.  More precisely, it is the expected value of the number of hashes needed to produce a chain of blocks of those particular difficulties.} If a majority of CPU power is controlled by honest nodes, the honest chain will grow the fastest and outpace any competing chains. To modify a past block, an attacker would have to redo the proof-of-work of the block and all blocks after
 it and then catch up with and surpass the work of the honest nodes. We will show later that the probability of a slower attacker catching up
 diminishes exponentially as subsequent blocks are added.
 
 \marginnote{Difficulty is defined as the reciprocal of the \emph{target}, which is a 32 byte integer.  A block is successful mined when the block header hash is below the target value. \\Difficulty is adjusted every 2016 blocks by computing the }
-To compensate for increasing hardware speed and varying interest in running nodes over time, the proof-of-work difficulty is determined by a moving average targeting an average number of blocks per hour. If they're generated too fast, the difficulty increases.  
+To compensate for increasing hardware speed and varying interest in running nodes over time, the proof-of-work difficulty is determined by a moving average targeting an average number of blocks per hour.\footnote{The targeted difficulty is not a moving average but based on counting the elapsed time to mine every 2016 blocks... }   If they're generated too fast, the difficulty increases.
 
 \section{Network}\label{network}
 
