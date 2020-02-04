@@ -191,8 +191,12 @@ majority decision is represented by the longest chain, which has the greatest pr
 it and then catch up with and surpass the work of the honest nodes. We will show later that the probability of a slower attacker catching up
 diminishes exponentially as subsequent blocks are added.
 
-\marginnote{Difficulty is defined as the reciprocal of the \emph{target}, which is a 32 byte integer.  A block is successful mined when the block header hash is below the target value. \\Difficulty is adjusted every 2016 blocks by computing the }
-To compensate for increasing hardware speed and varying interest in running nodes over time, the proof-of-work difficulty is determined by a moving average targeting an average number of blocks per hour.\footnote{The targeted difficulty is not a moving average but based on counting the elapsed time to mine every 2016 blocks... }   If they're generated too fast, the difficulty increases.
+
+To compensate for increasing hardware speed and varying interest in running nodes over time, the proof-of-work difficulty\footnote{Difficulty is defined as a constant multiplied by the reciprocal of the \emph{target}, which is a 32 byte integer.  A block is successful mined when the block header hash is below the target value.
+} is determined by a moving average targeting an average number of blocks per hour.\footnote{The difficulty adjustment is not based on a moving average but on comparing the elapsed time to mine 2,016 blocks with the expected time.  Every 2,016 block mined has a new difficulty calculated by multiplying the old difficulty by the ratio of expected time to actual time.  More precisely: $$ \text{new difficulty} = \text{old difficulty} \cdot \left( \frac{\text{expected time}}{\text{actual time}}\right)$$ Also, to keep difficulty from varying abruptly, the adjustment is limited by a factor of 4: $$1/4 <= \frac{\text{new difficulty}}{\text{old difficulty}} <= 4$$
+
+"Actual time" is defined as the difference in the timestamps of the last and first of the 2016 blocks.  This is not expected to be a very accurate measure of time, as the rules for timestamping are generous, but suffices for difficulty adjustment.
+ }   If they're generated too fast, the difficulty increases.
 
 \section{Network}\label{network}
 
