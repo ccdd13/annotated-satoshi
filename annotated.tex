@@ -230,7 +230,7 @@ As long as they reach many nodes, they will get into a block before long. Block 
 \section{Incentive}\label{incentive}
 
 \newthought{By convention}, the first transaction in a block is a special transaction
-that starts a new coin owned by the creator of the block.  \footnote{This is the \emph{coinbase} transaction.  It has exactly one input which refers to a null outpoint.  The \texttt{scriptSig} for the input, confusingly referred to as the "coinbase", allows up to 100 bytes of data.\\By BIP 34, this data must include the block height.  The "extra nonce" is also part of the data, as the nonce field in the block header is not sufficient for mining at current difficulties.\\Besides the output to pay the miner, Segwit mandates an additional output with \texttt{OP\_RETURN} script containing contains a commitment to the witness data. } This adds an
+that starts a new coin owned by the creator of the block.  \footnote{This is the \emph{coinbase} transaction.  It has exactly one input which refers to a null outpoint.  The \texttt{scriptSig} for the input, confusingly referred to as the "coinbase", allows up to 100 bytes of data.\\By BIP 34, this data must include the block height.  The "extra nonce" is also part of the data, as the nonce field in the block header is not sufficient for mining at current difficulties.\\Besides the output to pay the miner, Segwit mandates an additional output with \texttt{OP\_RETURN} script containing a commitment to the witness data. } This adds an
 incentive for nodes to support the network, and provides a way to
 initially distribute coins into circulation, since there is no central
 authority to issue them. The steady addition of a constant of amount of
